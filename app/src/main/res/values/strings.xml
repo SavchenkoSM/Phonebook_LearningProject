@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PhoneBook App</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_data">Add</string>
+    <string name="enter_param">Enter full name and phone number below:</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="last_name">Last name</string>
+    <string name="middle_name">Middle name</string>
+    <string name="is_empty">The field is empty!</string>
+    <string name="search_enter">Enter contact parameters</string>
+    <string name="not_entered">Not Entered! This field is required!</string>
+    <string name="lower_limit">Entered less than 6 characters</string>
+    <string name="upper_limit">Entered more than 10 characters</string>
+    <string name="txt_limit">Entered more than 20 characters</string>
+</resources>

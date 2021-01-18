@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="10dp"
+        app:cardBackgroundColor="#FFFFFF">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/personFio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:maxWidth="300dp"
+                android:singleLine="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:id="@+id/personNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/personFio"
+                android:layout_alignParentBottom="@id/personFio"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:width="5dp"
+                android:height="5dp"
+                app:backgroundTint="@color/correctColor"
+                app:backgroundTintMode="add"
+                app:cornerRadius="5dp"
+                app:icon="@android:drawable/ic_menu_edit"
+                app:iconTintMode="multiply" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnEdit"
+                android:layout_alignParentEnd="true"
+                android:width="5dp"
+                android:height="5dp"
+                app:backgroundTint="#DD2D20"
+                app:cornerRadius="5dp"
+                app:icon="@android:drawable/ic_menu_delete"
+                app:iconTintMode="multiply" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
