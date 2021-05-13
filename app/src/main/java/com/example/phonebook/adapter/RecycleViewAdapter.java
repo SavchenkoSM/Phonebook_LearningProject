@@ -1,4 +1,4 @@
-package com.example.phonebook;
+package com.example.phonebook.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.phonebook.R;
+import com.example.phonebook.database.DBHelper;
+import com.example.phonebook.models.PersonInfo;
+import com.example.phonebook.views.AddPersonFragment;
+import com.example.phonebook.views.MainActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +26,19 @@ public class RecycleViewAdapter
         implements Filterable {
 
     private final Context ctx;
-    private List<PersonInfo> personInfoList;
-    private View view;
-    private final ArrayList<PersonInfo> arrayList;
-    private PersonInfo personInfo;
+
     private DBHelper dbHelper;
+
+    private PersonInfo personInfo;
+    private List<PersonInfo> personInfoList;
+    private final ArrayList<PersonInfo> arrayList;
+
     public int editPosition;
-    private String fullName;
+    private String fullPersonName;
+
     private final ItemFilter searchPersonFilter = new ItemFilter();
+
+    private View view;
 
     public RecycleViewAdapter(Context ctx, List<PersonInfo> data) {
         this.ctx = ctx;
@@ -40,15 +51,15 @@ public class RecycleViewAdapter
      * Установка разметки для карточки контакта
      */
     static class PersonViewHolder extends RecyclerView.ViewHolder {
-        TextView personFio, personNumber;
-        Button btnEdit, btnDelete;
+        TextView personFioTextView, personPhoneTextView;
+        Button editButton, deleteButton;
 
         public PersonViewHolder(View itemView) {
             super(itemView);
-            personFio = itemView.findViewById(R.id.personFio);
-            personNumber = itemView.findViewById(R.id.personNumber);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            personFioTextView = itemView.findViewById(R.id.personFio);
+            personPhoneTextView = itemView.findViewById(R.id.personNumber);
+            editButton = itemView.findViewById(R.id.editButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
@@ -64,21 +75,21 @@ public class RecycleViewAdapter
      * Заполнение полей карточки контакта и обработка взаимодействий с ней
      */
     @Override
-    public void onBindViewHolder(PersonViewHolder holder, int position) {
+    public void onBindViewHolder(PersonViewHolder personViewHolder, int position) {
         personInfo = personInfoList.get(position);
-        int id = personInfo.getID();
+        int personInfoID = personInfo.getID();
         dbHelper = new DBHelper(ctx);
-        fullName = String.format("%s %s %s", personInfo.getLastName(),
+        fullPersonName = String.format("%s %s %s", personInfo.getLastName(),
                 personInfo.getName(), personInfo.getMiddleName());
 
-        holder.personFio.setText(fullName);
-        holder.personNumber.setText(personInfo.getPhone());
-        holder.btnEdit.setOnClickListener(v -> {
+        personViewHolder.personFioTextView.setText(fullPersonName);
+        personViewHolder.personPhoneTextView.setText(personInfo.getPhone());
+        personViewHolder.editButton.setOnClickListener(v -> {
             editPosition = position;
             showDialogFragment(view);
         });
-        holder.btnDelete.setOnClickListener(v -> {
-            dbHelper.deleteContact(id);
+        personViewHolder.deleteButton.setOnClickListener(v -> {
+            dbHelper.deleteContact(personInfoID);
             personInfoList.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, getItemCount());
@@ -91,17 +102,17 @@ public class RecycleViewAdapter
      */
     public void showDialogFragment(View view) {
         AddPersonFragment dialogFragment = new AddPersonFragment();
-        dialogFragment.flag = true;
+        dialogFragment.isEditButtonPressed = true;
         dialogFragment.editPosition = editPosition;
-        dialogFragment.filteredInfoList = personInfoList;
-        MainActivity activity = (MainActivity) view.getContext();
-        dialogFragment.show(activity.getSupportFragmentManager(), null);
+        dialogFragment.filteredPersonsInfoList = personInfoList;
+        MainActivity mainActivity = (MainActivity) view.getContext();
+        dialogFragment.show(mainActivity.getSupportFragmentManager(), null);
     }
 
     /**
      * Обновление списков данных
      */
-    public void DataRefresh() {
+    public void dataRefresh() {
         if (personInfoList.size() > 0) {
             personInfoList = dbHelper.getAllData();
             arrayList.clear();
@@ -132,7 +143,7 @@ public class RecycleViewAdapter
             searchQuery = searchQuery.toString().toLowerCase();
             FilterResults searchResults = new FilterResults();
 
-            DataRefresh();
+            dataRefresh();
             if (searchQuery.length() == 0) {
                 personInfoList.addAll(arrayList);
             } else {
@@ -153,9 +164,9 @@ public class RecycleViewAdapter
 
         @SuppressWarnings("unchecked")
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            DataRefresh();
-            personInfoList = (ArrayList<PersonInfo>) results.values;
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            dataRefresh();
+            personInfoList = (ArrayList<PersonInfo>) filterResults.values;
             notifyDataSetChanged();
         }
     }
@@ -167,33 +178,4 @@ public class RecycleViewAdapter
         this.personInfoList = personInfoList;
         notifyDataSetChanged();
     }
-
-    /**
-     * Фильтр для поиска записи (по всем полям)
-     */
-    /*  public void filter(String charText) {
-        charText = charText.toLowerCase();
-
-        if (personInfoList.size() > 0) {
-            if (charText.length() > 0) {
-                //filteredPersonInfoList.clear();
-                for (PersonInfo personInfo : arrayList) {
-                    if (personInfo.getLastName().toLowerCase().contains(charText)
-                            || personInfo.getName().toLowerCase().contains(charText)
-                            || personInfo.getMiddleName().toLowerCase().contains(charText)
-                            || personInfo.getPhone().toLowerCase().contains(charText)) {
-                        //filteredPersonInfoList.add(personInfo);
-                        personInfoList.add(personInfo);
-                    }
-                    notifyDataSetChanged();
-                }
-            } else {
-                personInfoList.clear();
-                personInfoList.addAll(arrayList);
-                //filteredPersonInfoList.clear();
-                //filteredPersonInfoList.addAll(personInfoList);
-                notifyDataSetChanged();
-            }
-        }
-    }*/
 }

@@ -38,7 +38,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <Button
-                android:id="@+id/btnEdit"
+                android:id="@+id/editButton"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -51,10 +51,10 @@
                 app:iconTintMode="multiply" />
 
             <Button
-                android:id="@+id/btnDelete"
+                android:id="@+id/deleteButton"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnEdit"
+                android:layout_below="@id/editButton"
                 android:layout_alignParentEnd="true"
                 android:width="5dp"
                 android:height="5dp"

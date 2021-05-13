@@ -1,12 +1,13 @@
-package com.example.phonebook;
+package com.example.phonebook.database;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.phonebook.models.PersonInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
     private ContentValues values;
-    private int index, index1, index2, index3, index4, id;
+
+    private int lastNameColumnIndex, nameColumnIndex, middleNameColumnIndex,
+            phoneColumnIndex, personIdColumnIndex, personId;
     private String lastName, name, middleName, phone;
 
     // Запрос для создания БД
@@ -107,19 +110,19 @@ public class DBHelper extends SQLiteOpenHelper {
         @SuppressLint("Recycle") Cursor cursor = db.rawQuery(query, null);
 
         while (cursor.moveToNext()) {
-            index = cursor.getColumnIndex(COLUMN_LastName);
-            index1 = cursor.getColumnIndex(COLUMN_Name);
-            index2 = cursor.getColumnIndex(COLUMN_MiddleName);
-            index3 = cursor.getColumnIndex(COLUMN_Phone);
-            index4 = cursor.getColumnIndex(COLUMN_ID);
+            lastNameColumnIndex = cursor.getColumnIndex(COLUMN_LastName);
+            nameColumnIndex = cursor.getColumnIndex(COLUMN_Name);
+            middleNameColumnIndex = cursor.getColumnIndex(COLUMN_MiddleName);
+            phoneColumnIndex = cursor.getColumnIndex(COLUMN_Phone);
+            personIdColumnIndex = cursor.getColumnIndex(COLUMN_ID);
 
-            lastName = cursor.getString(index);
-            name = cursor.getString(index1);
-            middleName = cursor.getString(index2);
-            phone = cursor.getString(index3);
-            id = cursor.getInt(index4);
-            PersonInfo personInfo = new PersonInfo(id, lastName, name, middleName, phone);
+            lastName = cursor.getString(lastNameColumnIndex);
+            name = cursor.getString(nameColumnIndex);
+            middleName = cursor.getString(middleNameColumnIndex);
+            phone = cursor.getString(phoneColumnIndex);
+            personId = cursor.getInt(personIdColumnIndex);
 
+            PersonInfo personInfo = new PersonInfo(personId, lastName, name, middleName, phone);
             personInfoList.add(personInfo);
         }
         db.close();

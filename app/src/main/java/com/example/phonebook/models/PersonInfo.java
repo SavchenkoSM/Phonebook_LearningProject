@@ -1,4 +1,4 @@
-package com.example.phonebook;
+package com.example.phonebook.models;
 
 public class PersonInfo {
     private int id;
